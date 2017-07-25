@@ -41,61 +41,109 @@
 	    ];
   ***/
  
-var baseUrl = "/dataaccess/productlist"; 
-var productList = [];
+var productListAppEngine = [];
+var productListFunctions = [];
 
 	/*
 	 * Check every three keystrokes so that the entire resultset
 	 * does not need to be loaded in the page
 	 */
-	$('#autocompleteproduct').on('keyup', function(e) {
-	    if (e.which !== 32) {
-	        var value = $(this).val();
-	        if (value.length % 3 === 0) {
+	$('#autocompleteappengine').on('keyup', function(e) {
+	      	var searchString = $(this).val();
+	        if (searchString.length % 3 === 0) {
 	            // Call API
+
+				var baseUrl = "/dataaccess/gaeproductlist"; 	            
+	            var searchUrl = baseUrl + "/" + searchString;
 	            
-	            var searchUrl = baseUrl + "/" + value;
-	            
-				console.log("URL after 3 keys=" + searchUrl);	            
+//				console.log("URL after 3 keys=" + searchUrl);	            
 	            
 	            $.get(searchUrl, function(data) {
-	            	productList = data;
+	            	productListAppEngine = data;
 	            	
-	         		console.log("GET AFTER 3 keys: data=" + productList);
+	         		console.log("GET AFTER 3 keys: rows=" + productListAppEngine.length);
 	            }); /* END of get URL */
-	        } /* END of noWhitespaceCount = 3 */
-	    } /* END of ignore space */
+	        } /* END of count = 3 */
 	}); /* END of keyup function */
 
 	/*
 	 * Filter the results in case the resultset is very large
 	 */
-    $("#autocompleteproduct").autocomplete({
+    $("#autocompleteappengine").autocomplete({
     	source: function(request, response) {
-        	var results = $.ui.autocomplete.filter(productList, request.term);
+        	var results = $.ui.autocomplete.filter(productListAppEngine, request.term);
 
         	response(results.slice(0, 10));
     	} /* END of filter */
-}); /* END of autocomplete */
-});
-    
-// } );
- 
+	}); /* END of autocomplete APP ENGINE */
+
+	/*
+	 * Check every three keystrokes so that the entire resultset
+	 * does not need to be loaded in the page
+	 */
+	$('#autocompletefunctions').on('keyup', function(e) {
+	        var searchString = $(this).val();
+	        if (searchString.length % 3 === 0) {
+	            
+				var baseUrl = "/dataaccess/gcfproductlist"; 	            
+	            var searchUrl = baseUrl + "/" + searchString;
+	            
+//				console.log("URL after 3 keys=" + searchUrl);	            
+	            
+	            $.get(searchUrl, function(data) {
+	            	productListFunctions = data;
+	            	
+	         		console.log("GET AFTER 3 keys: rows=" + productListFunctions.length);
+	            }); /* END of get URL */
+	        }/* END of count = 3 */
+	}); /* END of keyup function */
+
+	/*
+	 * Filter the results in case the resultset is very large
+	 */
+    $("#autocompletefunctions").autocomplete({
+    	source: function(request, response) {
+        	var results = $.ui.autocomplete.filter(productListFunctions, request.term);
+
+        	response(results.slice(0, 10));
+    	} /* END of filter */
+}); /* END of autocomplete FUNCTIONS */
+
+
+
+}); /* END of main function */
  
   
   </script>
 </head>
 <body>
 
-<img src="https://storage.googleapis.com/autocomplete-demo-174321.appspot.com/newimproved.jpg" alt="New improved image" style="width:304px;height:200px;"></img> 
- 
-<div class="ui-widget">
-  <label for="autocompleteproduct">Find what you are looking for FAST: </label>
-  <input id="autocompleteproduct">
+<table style="width:100%">
+  <tr>
+	 <td colspan="2"><img src="https://storage.googleapis.com/autocomplete-demo-174321.appspot.com/newimproved.jpg" alt="New improved image" style="width:304px;height:200px;"></img></td>
+  </tr>
+  <tr>
+    <td><img src="https://storage.googleapis.com/autocomplete-demo-174321.appspot.com/AppEngine.png" alt="Google Cloud App Engine image" style="width:100px;height:100px;"></img>
+</td>
+    <td><div class="ui-widget">
+  <label for="autocompleteappengine">Find it with the APP ENGINE: </label>
+  <input id="autocompleteappengine">
+</div></td> 
+
+  </tr>
+  <tr>
+    <td><img src="https://storage.googleapis.com/autocomplete-demo-174321.appspot.com/CloudFunctions.png" alt="Google Cloud Functions image" style="width:100px;height:100px;"></img>
+</td>
+    <td><div class="ui-widget">
+  <label for="autocompletefunctions">Find it with FUNCTIONS: </label>
+  <input id="autocompletefunctions">
 </div>
+</td> 
+  </tr>  <tr>
+	 <td colspan="2"><img src="https://storage.googleapis.com/autocomplete-demo-174321.appspot.com/gcp.jpeg" alt="Google Cloud Platform image" style="width:304px;height:200px;"></img>
+ </td>
+  </tr>  
+</table>
 
-
-<img src="https://storage.googleapis.com/autocomplete-demo-174321.appspot.com/gcp.jpeg" alt="Google Cloud Platform image" style="width:304px;height:200px;"></img>
- 
 </body>
 </html>

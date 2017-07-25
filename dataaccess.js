@@ -5,18 +5,16 @@ var express = require('express');
 var app = express();
 
 const mysql = require('mysql');
-const url = require('url');
 
 /*
+ * APP ENGINE
  * Get the real product data from MySQL
  */
-app.get('/productlist/:searchstring', function(req, res, next) {
+app.get('/gaeproductlist/:searchstring', function(req, res, next) {
 	
 	var searchString = req.params.searchstring;
 	
-	console.log("DATAACCESS: entering route with path=" + searchString);
-	
-
+	console.log("DATAACCESS/gae: entering route with path=" + searchString);
 	
 	var dataTags = [];
 	
@@ -40,7 +38,7 @@ app.get('/productlist/:searchstring', function(req, res, next) {
 			return;
 		}
 					
-console.log('DATAACCESS:  The solution is: ', rows);
+//console.log('DATAACCESS:  The solution is: ', rows);
 
 		/* 
 		 * Create tags for each available productname
@@ -53,15 +51,46 @@ console.log('DATAACCESS:  The solution is: ', rows);
 
 		connection.end();
 			
-console.log("DATAACCESS: route returning length=" + dataTags.length + " values=" + dataTags);	
+//console.log("DATAACCESS: route returning length=" + dataTags.length + " values=" + dataTags);	
 
   		res.send(dataTags);
 			
 	}); /* END of query */
 		
-//	});	/* END of connect */
+}); /* END of app.get gaeproductlist */
 
-}); /* END of app.get /realdata */
+
+/*
+ * APP ENGINE
+ * Get the real product data from MySQL
+ */
+app.get('/gcfproductlist/:searchstring', function(req, res, next) {
+	
+	var searchString = req.params.searchstring;
+	
+	console.log("DATAACCESS/gcf: entering route with path=" + searchString);
+	
+	var dataTags = [];
+			
+//console.log("DATAACCESS: route returning length=" + dataTags.length + " values=" + dataTags);	
+
+	var rest = require('restler');
+	var functionUrl = "https://us-central1-autocomplete-demo-174321.cloudfunctions.net/getProductList";
+	
+	var options = {};
+	
+	options.data = {"searchstring": searchString};
+	
+	var pushSvc = rest.post( functionUrl, options );
+	pushSvc.on( 'complete', function(data, response) 
+      { // we have a reply
+         // fetch the json response
+		console.log("DATAACCESS: after message pushed response=" + data);
+        res.send(data);
+	});
+	
+		
+}); /* END of app.get gcfproductlist */
 
 
 /*
@@ -99,7 +128,7 @@ app.get('/loadproductjson', function(req, res, next) {
 	.then(res => res.json())
 	.then((productjson) => {
 		
-console.log('LOADPRODUCTJSON: json=', productjson);
+//console.log('LOADPRODUCTJSON: json=', productjson);
 
 		var productlist = [];
 		var rowcount = productjson.length;
@@ -114,7 +143,7 @@ console.log('LOADPRODUCTJSON: json=', productjson);
 			productlist[i][0] = product.name;
 		}	
 		
-		console.log("LOADPRODUCTJSON: productlist=" + productlist);		
+//		console.log("LOADPRODUCTJSON: productlist=" + productlist);		
 
 		/*
 		 * Insert into the MqSql database
@@ -130,7 +159,7 @@ console.log('LOADPRODUCTJSON: json=', productjson);
 		  database : 'inventorydatabase'
 		});
 		
-		console.log("DATAACCESS: created connection, but not connected yet");	
+//		console.log("DATAACCESS: created connection, but not connected yet");	
 		
 		connection.connect(function(err) {
 		
