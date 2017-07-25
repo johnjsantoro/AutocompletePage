@@ -9,35 +9,59 @@
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script>
+  /*eslint-env jquery */
+
+  /*globals getACtags */
   $( function() {
-    var availableTags = [
-      "ActionScript",
-      "AppleScript",
-      "Asp",
-      "BASIC",
-      "C",
-      "C++",
-      "Clojure",
-      "COBOL",
-      "ColdFusion",
-      "Erlang",
-      "Fortran",
-      "Groovy",
-      "Haskell",
-      "Java",
-      "JavaScript",
-      "Lisp",
-      "Perl",
-      "PHP",
-      "Python",
-      "Ruby",
-      "Scala",
-      "Scheme"
-    ];
+
+/***/
+	var availableTags = [
+	      "ActionScript",
+	      "AppleScript",
+	      "Asp",
+	      "BASIC",
+	      "C",
+	      "C++",
+	      "Clojure",
+	      "COBOL",
+	      "ColdFusion",
+	      "Erlang",
+	      "Fortran",
+	      "Groovy",
+	      "Haskell",
+	      "Java",
+	      "JavaScript",
+	      "Lisp",
+	      "Perl",
+	      "PHP",
+	      "Python",
+	      "Ruby",
+	      "Scala",
+	      "Scheme"
+	    ];
+
+  /***/
+ 
+var url = "https://8081-dot-2325953-dot-devshell.appspot.com/dataaccess/realdata";
+
+console.log("INDEX: about to call dataaccess route");
+
+
+$.get(url, function(data){
+
+	availableTags = data;
+	
+	console.log("INDEX: Data Loaded length=" + availableTags.length + " data=" + data);
+
     $( "#tags" ).autocomplete({
       source: availableTags
     });
-  } );
+});
+    
+ } );
+ 
+ 
+  
   </script>
 </head>
 <body>
