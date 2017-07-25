@@ -50,6 +50,11 @@ console.log("DATAACCESS: created connection, but not connected yet");
 		}
 					
 console.log('DATAACCESS:  The solution is: ', rows);
+
+/***
+ *** Limit to 10,000 rows
+ */
+rows.length = 10000;
 		
 		for (var i = 0; i < rows.length; i++) {
 			var row = rows[i];
@@ -57,7 +62,7 @@ console.log('DATAACCESS:  The solution is: ', rows);
 			dataTags[i] = row.productname;
 		}
 
-		connection.release();
+		connection.end();
 			
 console.log("DATAACCESS: route returning length=" + dataTags.length + " values=" + dataTags);	
 
@@ -97,7 +102,7 @@ app.get('/loadproductjson', function(req, res, next) {
 	 * GCP bucket holds JSON
 	 * https://storage.googleapis.com/autocomplete-demo-174321.appspot.com/bbproduct.json
 	 */
-	var productjsonurl = "https://storage.googleapis.com/autocomplete-demo-174321.appspot.com/bbproduct.json";
+	var productjsonurl = "https://storage.googleapis.com/autocomplete-demo-174321.appspot.com/products.json";
 
 	var fetch = require("node-fetch");
 
@@ -116,7 +121,8 @@ console.log('LOADPRODUCTJSON: json=', productjson);
 		for (var i = 0; i < rowcount; i++) {
 			var product = productjson[i];
 	
-			productlist[i] = product.name;
+			productlist[i] = [];
+			productlist[i][0] = product.name;
 		}	
 		
 		console.log("LOADPRODUCTJSON: productlist=" + productlist);		
@@ -143,13 +149,14 @@ console.log('LOADPRODUCTJSON: json=', productjson);
 				console.log('DATAACCESS: Error while performing connect= ' + err);
 				return;
 			}
-			
+/***			
 	productlist = [
 	      ["dummy1"],
 	      ["BASIC"],
 	      ["C"],
 	      ["Data Access"]
 	     ];
+ ***/
 	
 			connection.query('INSERT into inventorytable (productname) VALUES ?', [productlist], function(err) {
 	
@@ -160,7 +167,7 @@ console.log('LOADPRODUCTJSON: json=', productjson);
 			}
 						
 	
-			connection.release();
+			connection.end();
 				
 			console.log("DATAACCESS: insert completed");	
 	
