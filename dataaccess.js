@@ -5,14 +5,16 @@ var express = require('express');
 var app = express();
 
 const mysql = require('mysql');
+const url = require('url');
 
 /*
  * Get the real product data from MySQL
  */
-app.get('/realdata', function(req, res, next) {
+app.get('/productlist/:searchstring', function(req, res, next) {
 	
+	var searchString = req.params.searchstring;
 	
-console.log("DATAACCESS: entering route");
+console.log("DATAACCESS: entering route with path=" + searchString);
 	
 
 	
@@ -41,7 +43,8 @@ console.log("DATAACCESS: created connection, but not connected yet");
 		}
  */
  
- 		connection.query('SELECT * from inventorytable', function(err, rows, fields) {
+ 		var queryString = "SELECT productname FROM inventorytable WHERE productname LIKE '%" + searchString + "%'";
+ 		connection.query(queryString, function(err, rows, fields) {
 
 	
 		if (err) {
@@ -51,11 +54,9 @@ console.log("DATAACCESS: created connection, but not connected yet");
 					
 console.log('DATAACCESS:  The solution is: ', rows);
 
-/***
- *** Limit to 10,000 rows
- */
-rows.length = 10000;
-		
+		/* 
+		 * Create tags for each available productname
+		 */
 		for (var i = 0; i < rows.length; i++) {
 			var row = rows[i];
 	

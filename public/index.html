@@ -41,33 +41,45 @@
 	    ];
   ***/
  
-var url = "https://8081-dot-2325953-dot-devshell.appspot.com/dataaccess/realdata";
+var baseUrl = "/dataaccess/productlist"; 
+var productList = [];
 
-console.log("INDEX: about to call dataaccess route");
+	/*
+	 * Check every three keystrokes so that the entire resultset
+	 * does not need to be loaded in the page
+	 */
+	$('#autocompleteproduct').on('keyup', function(e) {
+	    if (e.which !== 32) {
+	        var value = $(this).val();
+	        if (value.length % 3 === 0) {
+	            // Call API
+	            
+	            var searchUrl = baseUrl + "/" + value;
+	            
+				console.log("URL after 3 keys=" + searchUrl);	            
+	            
+	            $.get(searchUrl, function(data) {
+	            	productList = data;
+	            	
+	         		console.log("GET AFTER 3 keys: data=" + productList);
+	            }); /* END of get URL */
+	        } /* END of noWhitespaceCount = 3 */
+	    } /* END of ignore space */
+	}); /* END of keyup function */
 
-
-$.get(url, function(data){
-
-	var productList = data;
-	
-	console.log("INDEX: Data Loaded length=" + productList.length + " data=" + data);
-
-/***
-    $( "#autocompleteproduct" ).autocomplete({
-      source: availableTags
-    });
- ***/
-
+	/*
+	 * Filter the results in case the resultset is very large
+	 */
     $("#autocompleteproduct").autocomplete({
     	source: function(request, response) {
         	var results = $.ui.autocomplete.filter(productList, request.term);
 
-        response(results.slice(0, 10));
-    }
-});
+        	response(results.slice(0, 10));
+    	} /* END of filter */
+}); /* END of autocomplete */
 });
     
- } );
+// } );
  
  
   
