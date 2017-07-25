@@ -14,7 +14,7 @@ app.get('/productlist/:searchstring', function(req, res, next) {
 	
 	var searchString = req.params.searchstring;
 	
-console.log("DATAACCESS: entering route with path=" + searchString);
+	console.log("DATAACCESS: entering route with path=" + searchString);
 	
 
 	
@@ -30,18 +30,6 @@ console.log("DATAACCESS: entering route with path=" + searchString);
 	  password : 'passw0rd',
 	  database : 'inventorydatabase'	  
 	});
-	
-console.log("DATAACCESS: created connection, but not connected yet");	
-	
-/*
-  		connection.connect(function(err) {
- 
-	
-		if(err) {
-			console.log('DATAACCESS: Error while performing connect= ' + err);
-			return;
-		}
- */
  
  		var queryString = "SELECT productname FROM inventorytable WHERE productname LIKE '%" + searchString + "%'";
  		connection.query(queryString, function(err, rows, fields) {

@@ -21,9 +21,6 @@ app.use(express.static(__dirname + '/public'));
 var mysqlroute = require('./dataaccess');
 app.use("/dataaccess", mysqlroute);
 
-var myknexroute = require('./knexaccess');
-app.use("/knexaccess", myknexroute);
-
 // [START hello_world]
 // Say hello!
 app.get('/hello', (req, res) => {
