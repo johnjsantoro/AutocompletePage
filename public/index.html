@@ -43,7 +43,11 @@
  
 var productListAppEngine = [];
 var productListFunctions = [];
+var productListComputeEngine = [];
 
+	/***
+	 *** APP ENGINE
+	 ***/
 	/*
 	 * Check every three keystrokes so that the entire resultset
 	 * does not need to be loaded in the page
@@ -107,8 +111,43 @@ var productListFunctions = [];
 
         	response(results.slice(0, 10));
     	} /* END of filter */
-}); /* END of autocomplete FUNCTIONS */
+	}); /* END of autocomplete FUNCTIONS */
 
+	/***
+	 *** COMPUTE ENGINE
+	 ***/
+	/*
+	 * Check every three keystrokes so that the entire resultset
+	 * does not need to be loaded in the page
+	 */
+	$('#autocompletecomputeengine').on('keyup', function(e) {
+	      	var searchString = $(this).val();
+	        if (searchString.length % 3 === 0) {
+	            // Call API
+
+				var baseUrl = "/dataaccess/gceproductlist"; 	            
+	            var searchUrl = baseUrl + "/" + searchString;
+	            
+//				console.log("URL after 3 keys=" + searchUrl);	            
+	            
+	            $.get(searchUrl, function(data) {
+	            	productListComputeEngine = data;
+	            	
+	         		console.log("GET AFTER 3 keys: rows=" + productListComputeEngine.length);
+	            }); /* END of get URL */
+	        } /* END of count = 3 */
+	}); /* END of keyup function */
+
+	/*
+	 * Filter the results in case the resultset is very large
+	 */
+    $("#autocompletecomputeengine").autocomplete({
+    	source: function(request, response) {
+        	var results = $.ui.autocomplete.filter(productListComputeEngine, request.term);
+
+        	response(results.slice(0, 10));
+    	} /* END of filter */
+	}); /* END of autocomplete COMPUTE ENGINE */
 
 
 }); /* END of main function */
@@ -139,7 +178,17 @@ var productListFunctions = [];
   <input id="autocompletefunctions">
 </div>
 </td> 
-  </tr>  <tr>
+  </tr>  
+  <tr>
+    <td><img src="https://storage.googleapis.com/autocomplete-demo-174321.appspot.com/ComputeEngine.png" alt="Google Cloud Compute Engine image" style="width:100px;height:100px;"></img>
+</td>
+    <td><div class="ui-widget">
+  <label for="autocompletecomputeengine">Find it with the COMPUTE ENGINE: </label>
+  <input id="autocompletecomputeengine">
+</div></td> 
+
+  </tr>
+  <tr>
 	 <td colspan="2"><img src="https://storage.googleapis.com/autocomplete-demo-174321.appspot.com/gcp.jpeg" alt="Google Cloud Platform image" style="width:304px;height:200px;"></img>
  </td>
   </tr>  

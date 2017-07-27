@@ -29,7 +29,7 @@ app.get('/gaeproductlist/:searchstring', function(req, res, next) {
 	  database : 'inventorydatabase'	  
 	});
  
- 		var queryString = "SELECT productname FROM inventorytable WHERE productname LIKE '%" + searchString + "%'";
+ 		var queryString = "SELECT productname FROM inventorytable WHERE productname LIKE '%" + searchString + "%' LIMIT 10";
  		connection.query(queryString, function(err, rows, fields) {
 
 	
@@ -61,7 +61,7 @@ app.get('/gaeproductlist/:searchstring', function(req, res, next) {
 
 
 /*
- * APP ENGINE
+ * CLOUD FUNCTIONS
  * Get the real product data from MySQL
  */
 app.get('/gcfproductlist/:searchstring', function(req, res, next) {
@@ -91,6 +91,60 @@ app.get('/gcfproductlist/:searchstring', function(req, res, next) {
 	
 		
 }); /* END of app.get gcfproductlist */
+
+
+/*
+ * COMPUTE ENGINE
+ * Get the real product data from MySQL
+ */
+app.get('/gceproductlist/:searchstring', function(req, res, next) {
+	
+	var searchString = req.params.searchstring;
+	
+	console.log("DATAACCESS/gce: entering route with path=" + searchString);
+	
+	var dataTags = [];
+	
+	/*
+	 * Connect to MySQL
+	 */
+	var connection = mysql.createPool({
+	  connectionLimit: 10,	
+	  host     : '35.188.113.158',
+	  user     : 'root',
+	  password : 'passw0rd',
+	  database : 'inventorydatabase'	  
+	});
+ 
+ 		var queryString = "SELECT productname FROM inventorytable WHERE productname LIKE '%" + searchString + "%' LIMIT 10";
+ 		connection.query(queryString, function(err, rows, fields) {
+
+	
+		if (err) {
+			console.log('DATAACCESS: Error while performing select= ' + err);
+			return;
+		}
+					
+//console.log('DATAACCESS:  The solution is: ', rows);
+
+		/* 
+		 * Create tags for each available productname
+		 */
+		for (var i = 0; i < rows.length; i++) {
+			var row = rows[i];
+	
+			dataTags[i] = row.productname;
+		}
+
+		connection.end();
+			
+//console.log("DATAACCESS: route returning length=" + dataTags.length + " values=" + dataTags);	
+
+  		res.send(dataTags);
+			
+	}); /* END of query */
+		
+}); /* END of app.get gceproductlist */
 
 
 /*
