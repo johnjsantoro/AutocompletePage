@@ -54,7 +54,7 @@ var productListComputeEngine = [];
 	 */
 	$('#autocompleteappengine').on('keyup', function(e) {
 	      	var searchString = $(this).val();
-	        if (searchString.length % 3 === 0) {
+	        if ((searchString.length % 3 === 0) && (searchString.length > 0)) {
 	            // Call API
 
 				var baseUrl = "/dataaccess/gaeproductlist"; 	            
