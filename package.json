@@ -10,48 +10,6 @@
 		"test": "samples test app",
 		"cover": "nyc --cache npm test; nyc report --reporter=html"
 	},
-	"author": "Google Inc.",
-	"contributors": [
-		{
-			"name": "Jon Wayne Parrott",
-			"email": "jonwayne@google.com"
-		},
-		{
-			"name": "Jonathan Simon",
-			"email": "jbsimon@google.com"
-		},
-		{
-			"name": "Jason Dobry",
-			"email": "jdobry@google.com"
-		},
-		{
-			"name": "Ace Nassri",
-			"email": "anassri@google.com"
-		}
-	],
-	"cloud-repo-tools": {
-		"requiresKeyFile": true,
-		"requiresProjectId": true,
-		"test": {
-			"app": {
-				"args": [
-					"app.js"
-				],
-				"msg": "Hello, world!"
-			}
-		}
-	},
-	"license": "Apache-2.0",
-	"semistandard": {
-		"globals": [
-			"after",
-			"afterEach",
-			"before",
-			"beforeEach",
-			"describe",
-			"it"
-		]
-	},
 	"dependencies": {
 		"express": "~4.15.2",
 		"mysql": "latest",
