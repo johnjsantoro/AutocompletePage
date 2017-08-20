@@ -154,7 +154,7 @@ app.get('/dummydata', function(req, res, next) {
 	
 var dataTags = [
 	      "Java",
-	      "BASIC",
+	      "Fortran",
 	      "C",
 	      "Data Access"
 	     ];
