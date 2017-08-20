@@ -153,7 +153,7 @@ app.get('/gceproductlist/:searchstring', function(req, res, next) {
 app.get('/dummydata', function(req, res, next) {
 	
 var dataTags = [
-	      "ActionScript",
+	      "Java",
 	      "BASIC",
 	      "C",
 	      "Data Access"
